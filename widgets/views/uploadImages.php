@@ -26,7 +26,7 @@ $uploadFieldName = get_class($model) . "[uploads][]";
     </div>
     <div id="files-<?= $this->id ?>" class="files">
         <?php foreach ($model->getUploads() as $index => $upload): ?>
-            <div class="upload-wrapper"><a target="_blank" href="/<?= $upload->filename; ?>">
+            <div class="upload-wrapper"><a target="_blank" href="<?= $upload->filename; ?>">
                     <p>
                         <?= CHtml::image($upload->thumbUrl(100, 100)); ?>
                         <?= CHtml::hiddenField($uploadFieldName, $upload->id , array('id' => 'upload-' . $index)) ?>
