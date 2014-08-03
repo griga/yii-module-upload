@@ -1,10 +1,10 @@
 <?php
+
 /** Created by griga at 25.01.14 | 2:25.
  *
  * @property Upload $defaultPicture
  * @property Upload[] $uploads
  */
-
 class UploadBehavior extends CActiveRecordBehavior
 {
 
@@ -13,12 +13,13 @@ class UploadBehavior extends CActiveRecordBehavior
     public $folder = '';
 
     private $cache;
+
     /**
      * @return Upload[]
      */
     public function getUploads()
     {
-        if(!is_array($this->cache)){
+        if (!is_array($this->cache)) {
             if (!$this->owner->isNewRecord) {
                 $criteria = $this->getCriteria();
                 $criteria->compare('entity_id', $this->owner->id);
@@ -34,12 +35,16 @@ class UploadBehavior extends CActiveRecordBehavior
         return $this->cache;
     }
 
-    public function getDefaultPicture(){
-        $upload = $this->owner->defaultUpload;
-        if(!$upload){
+    public function getDefaultPicture()
+    {
+
+        if (isset($this->owner->defaultUpload)) {
+            $upload = $this->owner->defaultUpload;
+        } else {
             $upload = new Upload();
             $upload->filename = $this->defaultPictureUrl;
         }
+
         return $upload;
     }
 
@@ -54,8 +59,8 @@ class UploadBehavior extends CActiveRecordBehavior
         if ($this->owner->isNewRecord && isset($_POST[get_class($this->owner)]['uploads'])) {
             $uploads = $_POST[get_class($this->owner)]['uploads'];
             UploadService::updateDefaultUploadField($uploads[0], array(
-                'entity'=> get_class($this->owner),
-                'entity_id'=>$this->owner->primaryKey,
+                'entity' => get_class($this->owner),
+                'entity_id' => $this->owner->primaryKey,
             ));
             $command = Yii::app()->db->createCommand();
             foreach ($uploads as $index => $id)
@@ -69,7 +74,8 @@ class UploadBehavior extends CActiveRecordBehavior
     /**
      * @return CDbCriteria
      */
-    private function getCriteria(){
+    private function getCriteria()
+    {
         $criteria = new CDbCriteria();
         $criteria->order = 'sort';
 
